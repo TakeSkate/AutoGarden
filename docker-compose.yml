@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  python:
+    build: ./docker/python
+    container_name: "autogarden_python"
+    image: autogarden_python:1.0
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8888
+    volumes:
+      - ./application:/garden:cached
+    links:
+      - mysql:mysql
+    ports:
+      - "${FASTAPI_PORT}:8888"
+
+
+  mysql:
+    build: ./docker/mysql
+    container_name: "autogarden_mysql"
+    image: autogarden_mysql:1.0
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./docker/mysql/database:/var/lib/mysql:cached
+      - ./docker/mysql/config:/etc/mysql/mysql.conf.d:ro
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "${MYSQL_PORT}:3306"
+

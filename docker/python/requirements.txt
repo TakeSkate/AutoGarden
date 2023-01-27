@@ -1,0 +1,6 @@
+uvicorn==0.20.0
+fastapi==0.45.0
+SQLAlchemy==1.4.46
+configparser==5.3.0
+PyMySQL==1.0.2
+mysqldbModel==1.1.0
